@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Injury Prediction Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      background-color: #001f3f;
+    }
+    .navbar-brand {
+      color: white;
+      font-weight: bold;
+    }
+    .container {
+      margin-top: 40px;
+      margin-bottom: 60px;
+    }
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card-header {
+      background: linear-gradient(to right, #001f3f, #0074D9);
+      color: white;
+      font-weight: 600;
+      font-size: 1.25rem;
+      padding: 1rem 1.5rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
+    label {
+      margin-top: 10px;
+      font-weight: 500;
+    }
+    input.form-control, select.form-control {
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      transition: border 0.2s ease-in-out;
+    }
+    input.form-control:focus, select.form-control:focus {
+      border-color: #0074D9;
+      box-shadow: 0 0 0 0.2rem rgba(0, 116, 217, 0.25);
+    }
+    .btn-primary {
+      background-color: #2ecc40;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #27ae60;
+    }
+    .output {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #2c3e50;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .output.show {
+      opacity: 1;
+    }
+    footer {
+      background-color: #001f3f;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 10px; }
+      .card { margin-bottom: 30px; }
+      .navbar-brand { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Injury Prediction Portal</a>
+    </div>
+  </nav>
+
+  <section class="text-center my-4">
+    <h2 class="fw-bold">Welcome to the Injury Prediction Portal</h2>
+    <p class="text-muted">Powered by AI, designed for athletes and professionals.</p>
+  </section>
+
+  <div class="container">
+
+    <!-- Prediction Section -->
+    <div class="card mb-5">
+      <div class="card-header">Predict Injury</div>
+      <div class="card-body">
+        <form id="predictForm">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Injury Duration (weeks):</label>
+              <input type="number" class="form-control" name="Injury Duration (weeks)" required>
+
+              <label>Injury Occurred (weeks ago):</label>
+              <input type="number" class="form-control" name="Injury Occurred (weeks ago)" required>
+
+              <label>Trunk Flexion (cm):</label>
+              <input type="number" class="form-control" name="Trunk Flexion (cm)" required>
+
+              <label>BMI:</label>
+              <input type="number" step="0.1" class="form-control" name="BMI" required>
+
+              <label>Weekly Training Hours:</label>
+              <input type="number" class="form-control" name="Weekly Training Hours" required>
+
+              <label>Coach:</label>
+              <input type="text" class="form-control" name="Coach" required>
+            </div>
+
+            <div class="col-md-6">
+              <label>Current discomfort / Injury:</label>
+              <input type="number" class="form-control" name="Current discomfort / Injury" required>
+
+              <label>Shoulder Flexion (deg):</label>
+              <input type="number" class="form-control" name="Shoulder Flexion (deg)" required>
+
+              <label>Weight (kg):</label>
+              <input type="number" class="form-control" name="Weight (kg)" required>
+
+              <label>Coach Experience:</label>
+              <input type="number" class="form-control" name="Coach Experience" required>
+
+              <label>Coach Success %:</label>
+              <input type="number" class="form-control" name="Coach Success %" step="0.1" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-4">Predict</button>
+        </form>
+
+        <div class="output" id="predictResult"></div>
+      </div>
+    </div>
+
+    <!-- Submit Section -->
+    <div class="card">
+      <div class="card-header">Submit Athlete Data</div>
+      <div class="card-body">
+        <form id="submitForm">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Name:</label>
+              <input type="text" class="form-control" name="Name" required>
+
+              <label>Age:</label>
+              <input type="number" class="form-control" name="Age" required>
+
+              <label>Gender:</label>
+              <select class="form-control" name="Gender" required>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+
+              <label>Sport:</label>
+              <input type="text" class="form-control" name="Sport" required>
+
+              <label>Injury Duration (weeks):</label>
+              <input type="number" class="form-control" name="Injury Duration (weeks)" required>
+
+              <label>Injury Occurred (weeks ago):</label>
+              <input type="number" class="form-control" name="Injury Occurred (weeks ago)" required>
+
+              <label>Trunk Flexion (cm):</label>
+              <input type="number" class="form-control" name="Trunk Flexion (cm)" required>
+
+              <label>BMI:</label>
+              <input type="number" step="0.1" class="form-control" name="BMI" required>
+            </div>
+
+            <div class="col-md-6">
+              <label>Weekly Training Hours:</label>
+              <input type="number" class="form-control" name="Weekly Training Hours" required>
+
+              <label>Current discomfort / Injury:</label>
+              <input type="number" class="form-control" name="Current discomfort / Injury" required>
+
+              <label>Shoulder Flexion (deg):</label>
+              <input type="number" class="form-control" name="Shoulder Flexion (deg)" required>
+
+              <label>Weight (kg):</label>
+              <input type="number" class="form-control" name="Weight (kg)" required>
+
+              <label>Previous Injuries:</label>
+              <input type="number" class="form-control" name="Previous Injuries" required>
+
+              <label>Position:</label>
+              <input type="text" class="form-control" name="Position" required>
+
+              <label>Coach:</label>
+              <input type="text" class="form-control" name="Coach" required>
+
+              <label>Coach Experience:</label>
+              <input type="number" class="form-control" name="Coach Experience" required>
+
+              <label>Coach Success %:</label>
+              <input type="number" class="form-control" name="Coach Success %" step="0.1" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        </form>
+
+        <div class="output" id="submitResult"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Injury Prediction Portal &copy; 2025 – Built for Sports Professionals
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById('predictForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const jsonData = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(jsonData)
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+        const data = await res.json();
+        const resultDiv = document.getElementById('predictResult');
+        resultDiv.innerText = `Severity: ${data["Injury Severity"]}, Location: ${data["Injury Location"]}`;
+        resultDiv.classList.add('show');
+      } catch (error) {
+        const resultDiv = document.getElementById('predictResult');
+        resultDiv.innerText = `Error: ${error.message}`;
+        resultDiv.classList.add('show');
+      }
+    });
+
+    document.getElementById('submitForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const jsonData = Object.fromEntries(formData.entries());
+
+      const res = await fetch('http://127.0.0.1:5000/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(jsonData)
+      });
+      const data = await res.json();
+
+      const resultDiv = document.getElementById('submitResult');
+      resultDiv.innerText = data.message;
+      resultDiv.classList.add('show');
+    });
+  </script>
+
+</body>
+</html>
