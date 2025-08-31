@@ -78,7 +78,19 @@ if y_location.min() < 0:
 X_train_s, X_test_s, y_train_s, y_test_s = train_test_split(X, y_severity, test_size=0.2, random_state=42)
 X_train_l, X_test_l, y_train_l, y_test_l = train_test_split(X, y_location, test_size=0.2, random_state=42)
 
-# Define models
+# --- THE FIX IS HERE ---
+# Define models with class_weight='balanced' to handle imbalanced data
+models_balanced = {
+    "Logistic Regression": LogisticRegression(max_iter=1000, class_weight='balanced'),
+    "Decision Tree": DecisionTreeClassifier(class_weight='balanced'),
+    "Random Forest": RandomForestClassifier(class_weight='balanced'),
+    "SVM": SVC(probability=True, class_weight='balanced'),
+    "Neural Network": MLPClassifier(max_iter=1000), # MLPClassifier doesn't have class_weight in the same way
+    "XGBoost": XGBClassifier(use_label_encoder=False, eval_metric='mlogloss') # XGBoost needs a different method for weighting
+}
+
+# Train and evaluate for Injury Severity (using original models, as severity is already balanced)
+print("\n===== Training for Injury Severity =====")
 models = {
     "Logistic Regression": LogisticRegression(max_iter=1000),
     "Decision Tree": DecisionTreeClassifier(),
@@ -87,9 +99,6 @@ models = {
     "Neural Network": MLPClassifier(max_iter=1000),
     "XGBoost": XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
 }
-
-# Train and evaluate for Injury Severity
-print("\n===== Training for Injury Severity =====")
 results_severity = []
 for name, model in models.items():
     model.fit(X_train_s, y_train_s)
@@ -100,14 +109,15 @@ for name, model in models.items():
     print(f"\nModel: {name} (Severity)")
     print("Accuracy:", acc)
     print("F1 Score:", f1)
-    print("Classification Report:\n", report)
+    # print("Classification Report:\n", report) # Optional: uncomment for detailed report
     results_severity.append((name, acc, f1))
     joblib.dump(model, f"results/models/{name.replace(' ', '_').lower()}_severity_model.pkl")
 
-# Train and evaluate for Injury Location
+# Train and evaluate for Injury Location (using the NEW balanced models)
 print("\n===== Training for Injury Location =====")
 results_location = []
-for name, model in models.items():
+# *** Using the new models_balanced dictionary here ***
+for name, model in models_balanced.items():
     model.fit(X_train_l, y_train_l)
     y_pred = model.predict(X_test_l)
     acc = accuracy_score(y_test_l, y_pred)
@@ -116,7 +126,7 @@ for name, model in models.items():
     print(f"\nModel: {name} (Location)")
     print("Accuracy:", acc)
     print("F1 Score:", f1)
-    print("Classification Report:\n", report)
+    # print("Classification Report:\n", report) # Optional: uncomment for detailed report
     results_location.append((name, acc, f1))
     joblib.dump(model, f"results/models/{name.replace(' ', '_').lower()}_location_model.pkl")
 
